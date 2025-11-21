@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WeradioLive.com - Stream Your Favorite Stations</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="shortcut icon" href="logo.png" type="image/png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+<div class="header-content">
+<div class="brand">
+<div class="logo" aria-hidden="true">
+<img src="logo.png" alt="Logo" class="logo-image" />
+</div>
+<div class="header-text">
+<h1>WeradioLive</h1>
+<p>Stream Your Favorite Stations</p>
+</div>
+</div>
+<div class="controls-row" role="region" aria-label="Search and filters">
+<div class="live-visitors" aria-label="Live website visitors">
+<svg class="visitors-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+</svg>
+<div class="visitors-text">
+<span class="visitors-label">Live Visitors</span>
+<span class="visitors-count" id="visitorsCount">0</span>
+</div>
+</div>
+<input id="searchInput" class="search-input" type="search" placeholder="Search station name or location" aria-label="Search stations">
+<div class="column-selector">
+<label class="column-selector-label" for="columnCount">Columns:</label>
+<select id="columnCount" class="column-select" aria-label="Select number of columns">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+</select>
+</div>
+<button id="favFilterBtn" class="small-toggle" aria-pressed="false" title="Show favorites only">♥ Favorites</button>
+</div>
+</div>
+</header>
+
+<section class="hero">
+<div class="hero-map-container">
+<svg class="hero-map" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+<!-- Simplified world map outline -->
+<path class="map-path" d="M150,150 Q200,100 250,120 Q300,140 350,130 Q400,120 450,140 Q500,160 550,150 Q600,140 650,160 Q700,180 750,170 L750,250 Q700,260 650,250 Q600,240 550,250 Q500,260 450,250 Q400,240 350,250 Q300,260 250,250 Q200,240 150,250 Z" fill="none" stroke="var(--accent)" stroke-width="2" stroke-opacity="0.3"/>
+<path class="map-path" d="M200,200 Q250,180 300,190 Q350,200 400,190 Q450,180 500,190 Q550,200 600,190 L600,270 Q550,280 500,270 Q450,260 400,270 Q350,280 300,270 Q250,260 200,270 Z" fill="none" stroke="var(--accent-2)" stroke-width="2" stroke-opacity="0.3"/>
+<!-- Animated dots representing radio stations -->
+<circle class="map-dot" cx="250" cy="130" r="3" fill="var(--accent)"/>
+<circle class="map-dot" cx="320" cy="190" r="3" fill="var(--accent-2)"/>
+<circle class="map-dot" cx="420" cy="150" r="3" fill="var(--accent)"/>
+<circle class="map-dot" cx="530" cy="210" r="3" fill="var(--accent-2)"/>
+<circle class="map-dot" cx="620" cy="170" r="3" fill="var(--accent)"/>
+<circle class="map-dot" cx="680" cy="230" r="3" fill="var(--accent-2)"/>
+</svg>
+</div>
+<div class="hero-content">
+<h1 class="hero-title">Discover Radio Stations</h1>
+<p class="hero-subtitle">Stream your favorite stations from around the world</p>
+<div class="hero-search-container">
+<input id="heroSearchInput" class="hero-search-input" type="search" placeholder="Search station name or location" aria-label="Search stations">
+<button class="hero-search-button" aria-label="Search">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+</svg>
+</button>
+</div>
+</div>
+</section>
+
+<main class="main">
+<div class="section-header">
+<div>
+<h2>Featured Stations</h2>
+<p>Discover and enjoy radio stations from around the world</p>
+</div>
+<div style="display:flex; gap:0.5rem; align-items:center;">
+<div style="color:var(--muted); font-size:0.9rem;">Showing <span id="visibleCount">0</span> stations</div>
+</div>
+</div>
+
+<div class="stations-grid cols-8" id="stationsGrid" aria-live="polite"></div>
+
+<div class="navigation-buttons" aria-label="Stations pagination">
+<button class="nav-button" id="prevBtn" disabled>Previous</button>
+<button class="nav-button" id="nextBtn">Next</button>
+</div>
+</main>
+
+<footer class="site-footer">
+<div class="footer-content">
+<div class="footer-column">
+<h3>WeradioLive</h3>
+<p>Your portal to the sounds of the world. Tune in to thousands of radio stations for free.</p>
+</div>
+<div class="footer-column">
+<h3>Contact Us</h3>
+<p>For support or inquiries, please email us at:</p>
+<a href="mailto:contact@weradiolive.example.com">contact@weradio.live</a>
+</div>
+<div class="footer-column">
+<h3>Follow Us</h3>
+<p>Stay connected on social media:</p>
+<div class="social-links">
+<a href="#" aria-label="Facebook" title="Facebook">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4z"/></svg>
+</a>
+<a href="#" aria-label="Twitter" title="Twitter">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+</a>
+<a href="#" aria-label="Instagram" title="Instagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+</a>
+<a href="#" aria-label="WhatsApp" title="WhatsApp">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+<a href="#" aria-label="YouTube" title="YouTube">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+</a>
+<a href="#" aria-label="TikTok" title="TikTok">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+</a>
+<a href="#" aria-label="Website" title="Website">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+</a>
+</div>
+</div>
+</div>
+<div class="footer-bottom">
+&copy; 2024 WeradioLive. All Rights Reserved.
+</div>
+</footer>
+
+<div class="ad-slider-wrapper" id="adSliderWrapper">
+<div class="ad-slider-container">
+<div class="ad-slider-track" id="adSliderTrack">
+<div class="ad-slide">
+<a href="https://zedmobile.co.zm/dstv-bundles/" target="_blank" rel="noopener noreferrer">
+<img src="public/images/adverts/ad1.png" alt="Advertisement 1">
+</a>
+</div>
+<div class="ad-slide">
+<a href="" target="_blank" rel="noopener noreferrer">
+<img src="public/images/adverts/ad3.png" alt="Advertisement 2">
+</a>
+</div>
+<div class="ad-slide">
+<a href="https://ovine.nyalazi.com/" target="_blank" rel="noopener noreferrer">
+<img src="public/images/adverts/ad2.png" alt="Advertisement 2">
+</a>
+</div>
+<div class="ad-slide">
+<a href="https://web.facebook.com/profile.php?id=100071430084506" target="_blank" rel="noopener noreferrer">
+<img src="public/images/adverts/ad4.png" alt="Advertisement 2">
+</a>
+</div>
+<div class="ad-slide">
+<a href="public/images/adverts/ad5.png" target="_blank" rel="noopener noreferrer">
+<img src="public/images/adverts/ad5.png" alt="Advertisement 3">
+</a>
+</div>
+<div class="ad-slide">
+<a href="public/images/adverts/ad3.png" target="_blank" rel="noopener noreferrer">
+<img src="public/images/adverts/ad3.png" alt="Advertisement 4">
+</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="audio-player" id="audioPlayer" aria-live="polite" aria-hidden="true">
+<div class="audio-player-content">
+<div class="player-controls">
+<button class="control-button" id="prevStationBtn" aria-label="Previous station">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="prevIcon">
+<path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+</svg>
+</button>
+<button class="control-button" id="playPauseBtn" aria-label="Play" aria-pressed="false">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="playIcon" aria-hidden="true">
+<path d="M8 5v14l11-7z"/>
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="pauseIcon" style="display: none;" aria-hidden="true">
+<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+</svg>
+</button>
+<button class="control-button" id="nextStationBtn" aria-label="Next station">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="nextIcon">
+<path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+</svg>
+</button>
+<button class="share-button" id="shareBtn" aria-label="Share station" title="Share this station">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+<path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+</svg>
+<span class="share-tooltip" id="shareTooltip">Link copied!</span>
+</button>
+</div>
+<div class="player-info">
+<div class="now-playing">Now Playing</div>
+<div class="station-name-player" id="currentStationName">Select a station</div>
+</div>
+<div class="volume-control" aria-hidden="false">
+<button class="volume-button" id="muteBtn" aria-label="Mute/Unmute">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="volumeIcon" aria-hidden="true">
+<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+<path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+<path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="mutedIcon" style="display: none;" aria-hidden="true">
+<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+<line x1="23" y1="9" x2="17" y2="15"/>
+<line x1="17" y1="9" x2="23" y2="15"/>
+</svg>
+</button>
+<div class="volume-slider" id="volumeSlider" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" tabindex="0" aria-label="Volume">
+<div class="volume-fill" id="volumeFill" style="width: 70%"></div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="srLive" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+<audio id="audioElement"></audio>
+
+<script src="app.js"></script>
+</body>
+</html>
